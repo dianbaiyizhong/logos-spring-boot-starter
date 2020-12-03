@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loges日志</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+
+
+</body>
+
+<script>
+    var stompClient = null;
+
+    $(document).ready(function () {
+        openSocket();
+    });
+
+    function openSocket() {
+        if (stompClient == null) {
+            var socket = new SockJS('http://localhost:8080/logSocket');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                stompClient.subscribe('/topic/pullLogger', function (event) {
+                    var content = JSON.parse(event.body);
+                    $("#log-container div").append(content.timestamp + " " + content.level + " --- [" + content.threadName + "] " + content.className + "   :" + content.body).append("<br/>");
+                    $("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());
+                }, {
+                    token: "kltoen"
+                });
+            });
+        }
+    }
+
+    function closeSocket() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+            stompClient = null;
+        }
+    }
+</script>
+</html>
