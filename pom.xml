@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.nntk</groupId>
-    <artifactId>loges-spring-boot-starter</artifactId>
+    <artifactId>logos-spring-boot-starter</artifactId>
     <version>1.0</version>
     <build>
         <plugins>
@@ -22,6 +22,7 @@
 
     <properties>
         <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -36,6 +37,17 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
@@ -45,6 +57,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.5.2</version>
         </dependency>
     </dependencies>
 

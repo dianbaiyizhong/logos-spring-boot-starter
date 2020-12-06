@@ -71,6 +71,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         }
         String ip = localHost.getHostAddress();
 
-        return "http://" + ip + ":" + port + "/loges/index.html";
+        return "http://" + ip + ":" + port + "/logos/index.html";
     }
 }
