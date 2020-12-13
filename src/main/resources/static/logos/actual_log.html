@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>actual log</title>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="plugins/codemirror/codemirror.css">
+    <link rel="stylesheet" href="plugins/codemirror/theme/monokai.css">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper" style="margin-left: 0px">
+        <section class="content">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-text-width"></i>
+                                日志输出控制台
+                            </h3>
+                        </div>
+                        <div class="card-body" id="log_area" style="overflow-y:auto;height: 500px;">
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+</div>
+
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+<!-- CodeMirror -->
+<script src="plugins/codemirror/codemirror.js"></script>
+<script src="plugins/codemirror/mode/css/css.js"></script>
+<script src="plugins/codemirror/mode/xml/xml.js"></script>
+<script src="plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+
+<script src="plugins/axios/axios.min.js"></script>
+<script>
+    var stompClient = null;
+
+    $(document).ready(function () {
+        openSocket();
+
+        $("#log_area").height($(document.body)[0].clientHeight);
+
+    });
+
+    function openSocket() {
+        if (stompClient == null) {
+            var socket = new SockJS('/logSocket');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                stompClient.subscribe('/topic/pullLogger', function (event) {
+                    var content = JSON.parse(event.body);
+                    var final_content = content.timestamp + " " + content.level + " --- [" + content.threadName + "] " + content.className + "   :" + content.body;
+                    if (content.level == "INFO") {
+                        $("#log_area").append("<p class=\"text-info\">" + final_content + "</p>");
+                    } else if (content.level == "ERROR") {
+                        $("#log_area").append("<p class=\"text-danger\">" + final_content + "</p>");
+                    } else if (content.level == "WARN") {
+                        $("#log_area").append("<p class=\"text-warning\">" + final_content + "</p>");
+                    } else {
+                        $("#log_area").append("<p class=\"text-primary\">" + final_content + "</p>");
+                    }
+
+                    $("#log_area").scrollTop($("#log_area")[0].scrollHeight);
+
+
+                }, {
+                    token: "kltoen"
+                });
+            });
+        }
+    }
+
+    function closeSocket() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+            stompClient = null;
+        }
+    }
+</script>
+</html>

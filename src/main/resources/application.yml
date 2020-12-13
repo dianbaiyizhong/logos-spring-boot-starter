@@ -1,2 +1,6 @@
 logos:
-  path: ${user.home}/demo2
+  filePath :
+   info:
+      alias: INFO日志
+      path: C:/Users/zhenmei/demo/info
+

@@ -17,13 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
 
-    <style>
-        .navbar {
-            padding: 0;
 
-        }
-
-    </style>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -175,7 +169,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div>
 
 
-
             <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -186,15 +179,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                日志浏览
+                                日志监控
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link active">
+                                <a href="#" class="nav-link" onclick="openActual()">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Active Page</p>
+                                    <p>实时日志</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" onclick="openHistory()">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>历史日志</p>
                                 </a>
                             </li>
                         </ul>
@@ -263,31 +262,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <script src="plugins/axios/axios.min.js"></script>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.min.js"></script>
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.min.js"></script>-->
 
-<script id="yearMenu" type="text/html">
-    {{each data item i}}
-    <li class="nav-item">
-        <a href="#" class="nav-link active">
-            <i class="far fa-circle nav-icon"></i>
-            <p>{{item.name}}</p>
-        </a>
-    </li>
-    {{/each}}
-</script>
+<!--<script id="yearMenu" type="text/html">-->
+<!--{{each data item i}}-->
+<!--<li class="nav-item">-->
+<!--<a href="#" class="nav-link active">-->
+<!--<i class="far fa-circle nav-icon"></i>-->
+<!--<p>{{item.name}}</p>-->
+<!--</a>-->
+<!--</li>-->
+<!--{{/each}}-->
+<!--</script>-->
 <script>
+
+    function openLog(files) {
+
+        var file = files[0];
+        $('.content-wrapper').IFrame('createTab', file.name, 'log.html?hash=' + file.hash, file.hash, true);
+
+
+    }
+
+    function openActual() {
+        $('.content-wrapper').IFrame('createTab', '实时日志', 'actual_log.html', 'actual', true);
+
+    }
+
+    function openHistory() {
+        $('.content-wrapper').IFrame('createTab', '历史日志', 'elfinder.html', 'actual', true);
+
+
+    }
 
     $(document).ready(function () {
 
-        axios.get("rest/listYear").then(function (response) {
-            var html = template('yearMenu', response);
-            $(".nav-treeview").html(html);
-        }).catch(function (error) {
+        // axios.get("rest/listYear").then(function (response) {
+        //     var html = template('yearMenu', response);
+        //     $(".nav-treeview").html(html);
+        // }).catch(function (error) {
+        //
+        // }).then(function () {
+        // });
 
-        }).then(function () {
-        });
-
-        $('.content-wrapper').IFrame('createTab', '2020-11-06', 'log.html', 'index', true);
+        // $('.content-wrapper').IFrame('createTab', '2020-11-06', 'log.html', 'index', true);
 
     });
 
